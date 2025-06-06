@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eid al-Adha Greetings</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Menggunakan font Inter untuk tampilan yang lebih modern */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Mengatur gambar latar belakang */
+            background-image: url(Screenshot\ \(13\).png); /* URL placeholder gambar, ganti dengan gambar Anda */
+            background-size: cover; /* Menutupi seluruh area */
+            background-repeat: no-repeat; /* Tidak mengulang gambar */
+            background-position: center center; /* Memposisikan gambar di tengah */
+            background-attachment: fixed; /* Gambar latar belakang tetap saat digulir */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            position: relative; /* Diperlukan untuk overlay */
+            overflow: hidden; /* Mencegah scroll yang tidak diinginkan */
+        }
+
+        /* Overlay untuk membuat teks lebih mudah dibaca di atas gambar latar belakang */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.3); /* Overlay gelap transparan */
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2; /* Pastikan konten di atas overlay */
+            text-align: center;
+        }
+
+        .eid-button {
+            background-color: #4CAF50; /* Green background */
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Bayangan yang lebih menonjol */
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600; /* Sedikit lebih tebal */
+            position: relative; /* Untuk efek interaktif */
+            overflow: hidden; /* Untuk efek ripple */
+        }
+
+        .eid-button:hover {
+            background-color: #45a049; /* Darker green on hover */
+            transform: translateY(-5px); /* Angkat tombol sedikit lebih tinggi */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); /* Bayangan lebih besar saat hover */
+        }
+
+        .eid-button:active {
+            background-color: #3e8e41; /* Even darker green when clicked */
+            transform: translateY(0); /* Reset lift on click */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Kembali ke bayangan semula */
+        }
+
+        /* Efek ripple untuk tombol */
+        .eid-button::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10, 10);
+            opacity: 0;
+            transition: transform .5s, opacity 1s;
+        }
+
+        .eid-button:active::after {
+            transform: scale(0, 0);
+            opacity: .2;
+            transition: 0s;
+        }
+
+        /* Gaya Modal Kustom */
+        .modal {
+            display: none; /* Sembunyikan secara default */
+            position: fixed; /* Tetap di tempat */
+            z-index: 100; /* Di atas segalanya */
+            left: 0;
+            top: 0;
+            width: 100%; /* Lebar penuh */
+            height: 100%; /* Tinggi penuh */
+            overflow: auto; /* Aktifkan scroll jika perlu */
+            background-color: rgba(0, 0, 0, 0.6); /* Latar belakang semi-transparan */
+            backdrop-filter: blur(5px); /* Efek blur pada latar belakang */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+            animation: fadeInScale 0.3s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-message {
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .modal-title {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Elemen audio untuk lagu takbiran -->
+    <audio id="takbiranAudio" autoplay loop>
+        <!-- Ganti URL ini dengan URL langsung ke file audio takbiran Anda (misalnya .mp3 atau .ogg) -->
+        <source src="Takbiran Opick Disertai Tabuhan Bedug.mp3" type="audio/mpeg">
+        <!-- Anda bisa menambahkan fallback untuk peramban yang tidak mendukung tipe audio ini -->
+        Maaf, peramban Anda tidak mendukung elemen audio.
+    </audio>
+
+    <div class="container">
+        <button class="eid-button" onclick="showCustomModal()">Selamat Idul Adha 1446 H / 2025 M</button>
+    </div>
+
+    <!-- Modal Kustom -->
+    <div id="customModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeCustomModal()">&times;</span>
+            <div class="modal-title">Taqabbalallahu Minna Wa Minkum</div>
+            <p class="modal-message">
+                🌙Semoga Allah menerima amal ibadah kita dan kamu semua.
+                Selamat Hari Raya Idul Adha 1446 H / 2025 M. Mohon Maaf lahir & batin🌙 ♻️Rega Saputra dan Keluarga♻️
+            </p>
+            <button class="eid-button text-sm py-2 px-4" onclick="closeCustomModal()">Tutup</button>
+        </div>
+    </div>
+
+    <script>
+        // Mendapatkan elemen modal
+        const customModal = document.getElementById('customModal');
+        // Mendapatkan elemen audio
+        const takbiranAudio = document.getElementById('takbiranAudio');
+
+        // Fungsi untuk menampilkan modal
+        function showCustomModal() {
+            customModal.style.display = 'flex'; // Mengubah display menjadi flex untuk menampilkan modal
+            // Memulai pemutaran audio jika belum diputar (bisa jadi diblokir peramban)
+            if (takbiranAudio.paused) {
+                takbiranAudio.play().catch(e => console.log("Autoplay blocked:", e));
+            }
+        }
+
+        // Fungsi untuk menutup modal
+        function closeCustomModal() {
+            customModal.style.display = 'none'; // Mengubah display menjadi none untuk menyembunyikan modal
+        }
+
+        // Menutup modal jika pengguna mengklik di luar area konten modal
+        window.onclick = function(event) {
+            if (event.target == customModal) {
+                closeCustomModal();
+            }
+        }
+
+        // Menangani penekanan tombol Escape untuk menutup modal
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeCustomModal();
+            }
+        });
+
+        // Coba putar audio saat halaman dimuat
+        // Ini adalah usaha awal untuk autoplay. Peramban mungkin akan memblokirnya.
+        window.onload = function() {
+            // Memberikan sedikit penundaan untuk memastikan DOM siap
+            setTimeout(() => {
+                takbiranAudio.play().catch(e => {
+                    console.log("Autoplay blocked by browser policy:", e);
+                    // Anda bisa menambahkan UI untuk meminta pengguna memutar audio jika diblokir
+                });
+            }, 500); // Tunda 0.5 detik
+        };
+    </script>
+
+</body>
+</html>
